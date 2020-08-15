@@ -13,7 +13,7 @@ namespace Digital.Identity
                    new IdentityResource[]
                    {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
                    };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -21,6 +21,16 @@ namespace Digital.Identity
             {
                 new ApiScope("scope1"),
                 new ApiScope("scope2"),
+                new ApiScope("api.read")
+            };
+
+        public static IEnumerable<ApiResource> GetApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("api")
+                {
+                    Scopes = new string [] {"api.read"}
+                }
             };
 
         public static IEnumerable<Client> Clients =>
@@ -52,6 +62,20 @@ namespace Digital.Identity
 
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "scope2" }
+                },
+                new Client
+                {
+                    ClientId = "mvcclient",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:5004/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:5004/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:5004/signout-callback-oidc" },
+
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "api.read" }
                 },
             };
     }

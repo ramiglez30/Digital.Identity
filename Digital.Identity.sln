@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digital.Identity", "IdentityServer\Digital.Identity.csproj", "{976A96DF-E4A4-4B4C-829F-ABF6E0E4957B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcClient", "..\repos\IdentityServer\IdentityServer4\samples\Quickstarts\6_AspNetIdentity\src\MvcClient\MvcClient.csproj", "{2FAE6124-500F-4281-85DD-E00CABC1C382}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "..\repos\IdentityServer\IdentityServer4\samples\Quickstarts\6_AspNetIdentity\src\Api\Api.csproj", "{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{976A96DF-E4A4-4B4C-829F-ABF6E0E4957B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{976A96DF-E4A4-4B4C-829F-ABF6E0E4957B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{976A96DF-E4A4-4B4C-829F-ABF6E0E4957B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FAE6124-500F-4281-85DD-E00CABC1C382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FAE6124-500F-4281-85DD-E00CABC1C382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FAE6124-500F-4281-85DD-E00CABC1C382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FAE6124-500F-4281-85DD-E00CABC1C382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
