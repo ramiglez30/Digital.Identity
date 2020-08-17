@@ -19,47 +19,48 @@ namespace Digital.Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("scope1"),
-                new ApiScope("scope2"),
-                new ApiScope("api.read")
+                new ApiScope("paymentgateway.api.post", "Enviar peticiones de pago a la API PaymentGateway")
             };
 
         public static IEnumerable<ApiResource> GetApiResources =>
             new ApiResource[]
             {
-                new ApiResource("api")
+                new ApiResource("Sodexo PaymentGateway API")
                 {
-                    Scopes = new string [] {"api.read"}
+                    Scopes = new string [] { "paymentgateway.api.post" }
                 }
             };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // m2m client credentials flow client
                 new Client
                 {
-                    ClientId = "m2m.client",
-                    ClientName = "Client Credentials Client",
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-                    AllowedScopes = { "scope1" }
-                },
-                new Client
-                {
-                    ClientId = "mvcclient",
+                    ClientId = "sdxfront",
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:5004/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:5004/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:5004/signout-callback-oidc" },
+                    RedirectUris = { "https://localhost:9904/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:9904/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:9904/signout-callback-oidc" },
                     RequireConsent = true,
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api.read" }
+                    AllowedScopes = { "openid", "profile" }
+                },
+                new Client
+                {
+                    ClientId = "paymentbtn",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:9901/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:9901/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:9901/signout-callback-oidc" },
+                    RequireConsent = true,
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "paymentgateway.api.post" }
                 },
             };
     }

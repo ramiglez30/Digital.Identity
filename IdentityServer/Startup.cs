@@ -15,6 +15,8 @@ using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Digital.Identity
 {
@@ -101,10 +103,10 @@ namespace Digital.Identity
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.EnsureCreated();
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
 
                 if (!context.Clients.Any())
                 {
@@ -126,7 +128,7 @@ namespace Digital.Identity
 
                 if (!context.ApiScopes.Any())
                 {
-                    foreach(var scope in Config.ApiScopes)
+                    foreach (var scope in Config.ApiScopes)
                     {
                         context.ApiScopes.Add(scope.ToEntity());
                     }
@@ -140,6 +142,55 @@ namespace Digital.Identity
                         context.ApiResources.Add(resource.ToEntity());
                     }
                     context.SaveChanges();
+                }
+            }
+
+            CreateUsers(app).GetAwaiter().GetResult();
+        }
+
+        private static async Task CreateUsers(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                var bob = await userManager.FindByNameAsync("bob");
+                if (bob == null)
+                {
+                    bob = new ApplicationUser { UserName = "bob", Email = "bob@gmail.com", NormalizedUserName = "BOB" };
+
+                    await userManager.CreateAsync(bob, "Pass123$");
+                    await userManager.AddClaimAsync(bob, new Claim("name", "Bob Smith"));
+                    await userManager.AddClaimAsync(bob, new Claim("family_name", "Smith"));
+                    await userManager.AddClaimAsync(bob, new Claim("given_name", "Bob"));
+                    await userManager.AddClaimAsync(bob, new Claim("location", "Bogota"));
+                    await userManager.AddClaimAsync(bob, new Claim("website", "www.bob.com"));
+                }
+
+                var alice = await userManager.FindByNameAsync("alice");
+                if (alice == null)
+                {
+                    alice = new ApplicationUser { UserName = "alice", Email = "alice@gmail.com", NormalizedUserName = "ALICE" };
+
+                    await userManager.CreateAsync(alice, "Pass123$");
+                    await userManager.AddClaimAsync(alice, new Claim("name", "Alice Smith"));
+                    await userManager.AddClaimAsync(alice, new Claim("family_name", "Smith"));
+                    await userManager.AddClaimAsync(alice, new Claim("given_name", "Alice"));
+                    await userManager.AddClaimAsync(alice, new Claim("location", "Bogota"));
+                    await userManager.AddClaimAsync(alice, new Claim("website", "www.alice.com"));
+                }
+
+                var ana = await userManager.FindByNameAsync("ana");
+                if (ana == null)
+                {
+                    ana = new ApplicationUser { UserName = "ana", Email = "ana@gmail.com", NormalizedUserName = "ANA" };
+
+                    await userManager.CreateAsync(ana, "Pass123$");
+                    await userManager.AddClaimAsync(ana, new Claim("name", "Ana Perez"));
+                    await userManager.AddClaimAsync(ana, new Claim("family_name", "Perez"));
+                    await userManager.AddClaimAsync(ana, new Claim("given_name", "Ana"));
+                    await userManager.AddClaimAsync(ana, new Claim("location", "Bogota"));
+                    await userManager.AddClaimAsync(ana, new Claim("website", "www.ana.com"));
                 }
             }
         }
