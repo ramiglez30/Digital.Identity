@@ -1,52 +1,54 @@
 @model LoginViewModel
 
 <div class="login-page">
-    <partial name="_ValidationSummary" />
+    
 
     <div class="row">
 
         @if (Model.EnableLocalLogin)
         {
-            <div class="offset-sm-3 col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Entrar</h2>
-                    </div>
+        <div class="col-sm-6">
+            <h1>Iniciar Sesi&oacute;n</h1>
+            <partial name="_ValidationSummary" />
+            <div class="card">
+                <div class="card-header">
+                    <p class="lead">Ingrese sus datos</p>
+                </div>
 
-                    <div class="card-body">
-                        <form asp-route="Login">
-                            <input type="hidden" asp-for="ReturnUrl" />
+                <div class="card-body">
+                    <form asp-route="Login">
+                        <input type="hidden" asp-for="ReturnUrl" />
 
+                        <div class="form-group">
+                            <label asp-for="Username">Nombre de usuario</label>
+                            <input class="form-control" placeholder="Nombre de usuario" asp-for="Username" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password">Contrase&ntilde;a</label>
+                            <input type="password" class="form-control" placeholder="Contrase&ntilde;a" asp-for="Password" autocomplete="off">
+                        </div>
+                        @if (Model.AllowRememberLogin)
+                        {
                             <div class="form-group">
-                                <label asp-for="Username">Nombre de usuario</label>
-                                <input class="form-control" placeholder="Nombre de usuario" asp-for="Username" autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Password">Contrase&ntilde;a</label>
-                                <input type="password" class="form-control" placeholder="Contrase&ntilde;a" asp-for="Password" autocomplete="off">
-                            </div>
-                            @if (Model.AllowRememberLogin)
-                            {
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="RememberLogin">
-                                        <label class="form-check-label" asp-for="RememberLogin">
-                                            Recordarme en este ordenador
-                                        </label>
-                                    </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="RememberLogin">
+                                    <label class="form-check-label" asp-for="RememberLogin">
+                                        Recordarme en este ordenador
+                                    </label>
                                 </div>
-                            }
+                            </div>
+                        }
 
-                            @*<div>
-                                <p>The default users are alice/bob, password: Pass123$</p>
-                            </div>*@
+                        @*<div>
+                        <p>The default users are alice/bob, password: Pass123$</p>
+                    </div>*@
 
-                            <button class="btn btn-primary" name="button" value="login">Entrar</button>
-                            <button class="btn btn-secondary" name="button" value="cancel">Cancelar</button>
-                        </form>
-                    </div>
+                        <button class="btn btn-primary" name="button" value="login">Entrar</button>
+                        <button class="btn btn-secondary" name="button" value="cancel">Cancelar</button>
+                    </form>
                 </div>
             </div>
+        </div>
         }
 
         @if (Model.VisibleExternalProviders.Any())

@@ -1,15 +1,23 @@
 ﻿@model LogoutViewModel
 
-<div class="logout-page">
-    <div class="lead">
-        <h1>Logout</h1>
-        <p>Would you like to logut of IdentityServer?</p>
-    </div>
-
-    <form asp-action="Logout">
-        <input type="hidden" name="logoutId" value="@Model.LogoutId"  />
-        <div class="form-group">
-            <button class="btn btn-primary">Yes</button>
+    <div class="logout-page col-sm-6">
+        <h1>Cerrar sesión</h1>
+        <div class="card">
+            <div class="card-header">
+                <div class="lead">
+                    <p>¿Está seguro que desea cerrar sesión?</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="Logout">
+                    <input type="hidden" name="logoutId" value="@Model.LogoutId" />
+                    <div class="form-group">
+                        <button class="btn btn-primary">Si</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </form>
-</div>
+
+
+
+    </div>

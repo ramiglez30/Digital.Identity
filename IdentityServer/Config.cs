@@ -57,7 +57,7 @@ namespace Digital.Identity
                     RedirectUris = { "https://localhost:5004/signin-oidc" },
                     FrontChannelLogoutUri = "https://localhost:5004/signout-oidc",
                     PostLogoutRedirectUris = { "https://localhost:5004/signout-callback-oidc" },
-
+                    RequireConsent = true,
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "api.read" }
                 },
