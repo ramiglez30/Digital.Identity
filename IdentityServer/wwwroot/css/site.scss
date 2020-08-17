@@ -1,6 +1,15 @@
-﻿.body-container {
-    margin-top: 60px;
-    padding-bottom:40px;
+﻿body {
+    height: 100vh;
+    background-image: url('/images/background-2.jpg');
+    background-position: center; 
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size:cover
+}
+
+.body-container {
+    margin-top: 100px;
+    padding-bottom: 40px;
 }
 
 .welcome-page {
@@ -8,6 +17,10 @@
         list-style: none;
         padding: 4px;
     }
+
+    background-color: rgba(255, 255, 255, 1);
+    padding: 20px;
+    border-radius: 5px;
 }
 
 .logged-out-page {
