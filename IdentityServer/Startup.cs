@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using IdentityServer4;
 using Digital.Identity.Data;
 using Digital.Identity.Models;
 using Microsoft.AspNetCore.Builder;
@@ -102,10 +101,11 @@ namespace Digital.Identity
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.EnsureCreated();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
+                context.Database.EnsureCreated();
+
                 if (!context.Clients.Any())
                 {
                     foreach (var client in Config.Clients)
