@@ -1,4 +1,4 @@
-﻿namespace Digital.Identity.Admin.Models
+﻿namespace Digital.Identity.Admin.Models.Api
 {
     public class CreateUserInput
     {

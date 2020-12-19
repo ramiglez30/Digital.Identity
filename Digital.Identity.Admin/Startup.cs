@@ -1,5 +1,7 @@
+using AutoMapper;
 using Digital.Identity.Admin.Data;
-using Digital.Identity.Admin.Models;
+using Digital.Identity.Admin.Models.EF;
+using Digital.Identity.Admin.Services;
 using IdentityServer4.EntityFramework.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -32,10 +33,9 @@ namespace Digital.Identity.Admin
             services.AddControllers();
 
             services.AddDbContext<AdminDbContext>(options =>
-            {
-                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"), serverVersion);
-            }
-
+                {
+                    options.UseMySql(Configuration.GetConnectionString("MySqlConnection"), serverVersion);
+                }
             );
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
@@ -57,6 +57,10 @@ namespace Digital.Identity.Admin
             {
                 c.SwaggerDoc(name: "v1", info: new OpenApiInfo { Title = "My Identity Server 4 Admin API V1", Version = "v1" });
             });
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,10 +77,12 @@ namespace Digital.Identity.Admin
             }
             else
             {
+
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
