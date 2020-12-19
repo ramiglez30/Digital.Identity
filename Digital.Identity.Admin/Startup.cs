@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace Digital.Identity.Admin
@@ -25,10 +26,16 @@ namespace Digital.Identity.Admin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Get MySQl Server Version.
+            var serverVersion = ServerVersion.AutoDetect(Configuration.GetConnectionString("MySqlConnection"));
+
             services.AddControllers();
 
-            services.AddDbContext<AdminDbContext>(options => 
-                    options.UseMySql(Configuration.GetConnectionString("MySqlConnection"))
+            services.AddDbContext<AdminDbContext>(options =>
+            {
+                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"), serverVersion);
+            }
+
             );
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
@@ -37,16 +44,19 @@ namespace Digital.Identity.Admin
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddConfigurationDbContext(options =>
-                    options.ConfigureDbContext = opt => opt.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+                    options.ConfigureDbContext = opt => opt.UseMySql(Configuration.GetConnectionString("MySqlConnection"), serverVersion,
                     sql => sql.MigrationsAssembly(migrationsAssembly))
             );
 
             services.AddOperationalDbContext(options =>
-                    options.ConfigureDbContext = opt => opt.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+                    options.ConfigureDbContext = opt => opt.UseMySql(Configuration.GetConnectionString("MySqlConnection"), serverVersion,
                     sql => sql.MigrationsAssembly(migrationsAssembly))
             );
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(name: "v1", info: new OpenApiInfo { Title = "My Identity Server 4 Admin API V1", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +65,11 @@ namespace Digital.Identity.Admin
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Identity Server 4 Admin API V1");
+                });
             }
             else
             {
@@ -64,16 +79,6 @@ namespace Digital.Identity.Admin
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-    app.UseSwagger();
-
-    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-    // specifying the Swagger JSON endpoint.
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
 
             app.UseRouting();
 

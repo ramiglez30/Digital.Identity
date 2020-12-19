@@ -19,7 +19,8 @@ namespace Digital.Identity
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("paymentgateway.api.post", "Enviar peticiones de pago a la API PaymentGateway")
+                new ApiScope("paymentgateway.api.post", "Enviar peticiones de pago a la API PaymentGateway"),
+                new ApiScope("api.read", "API READ SCOPE sample")
             };
 
         public static IEnumerable<ApiResource> GetApiResources =>
@@ -28,6 +29,10 @@ namespace Digital.Identity
                 new ApiResource("Sodexo PaymentGateway API")
                 {
                     Scopes = new string [] { "paymentgateway.api.post" }
+                },
+                new ApiResource("API Resource Sample")
+                {
+                    Scopes = new string [] { "api.read" }
                 }
             };
 
@@ -61,6 +66,20 @@ namespace Digital.Identity
                     RequireConsent = true,
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "paymentgateway.api.post" }
+                },
+                 new Client
+                {
+                    ClientId = "mvcclient",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    RedirectUris = { "https://localhost:5004/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:5004/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:5004/signout-callback-oidc" },
+                    RequireConsent = true,
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "profile", "api.read" }
                 },
             };
     }

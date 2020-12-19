@@ -15,7 +15,7 @@ using Serilog;
 
 namespace Digital.Identity
 {
-    public class SeedData
+    public static class SeedData
     {
         public static void EnsureSeedData(string connectionString)
         {
@@ -48,7 +48,7 @@ namespace Digital.Identity
                         var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                         if (!result.Succeeded)
                         {
-                            throw new Exception(result.Errors.First().Description);
+                            throw new ArgumentException(result.Errors.First().Description);
                         }
 
                         result = userMgr.AddClaimsAsync(alice, new Claim[]{
@@ -59,7 +59,7 @@ namespace Digital.Identity
                         }).Result;
                         if (!result.Succeeded)
                         {
-                            throw new Exception(result.Errors.First().Description);
+                            throw new ArgumentException(result.Errors.First().Description);
                         }
                         Log.Debug("alice created");
                     }
@@ -80,7 +80,7 @@ namespace Digital.Identity
                         var result = userMgr.CreateAsync(bob, "Pass123$").Result;
                         if (!result.Succeeded)
                         {
-                            throw new Exception(result.Errors.First().Description);
+                            throw new ArgumentException(result.Errors.First().Description);
                         }
 
                         result = userMgr.AddClaimsAsync(bob, new Claim[]{
@@ -92,7 +92,7 @@ namespace Digital.Identity
                         }).Result;
                         if (!result.Succeeded)
                         {
-                            throw new Exception(result.Errors.First().Description);
+                            throw new ArgumentException(result.Errors.First().Description);
                         }
                         Log.Debug("bob created");
                     }
