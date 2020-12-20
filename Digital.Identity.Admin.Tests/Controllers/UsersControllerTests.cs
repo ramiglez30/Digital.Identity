@@ -169,5 +169,61 @@ namespace Digital.Identity.Admin.Tests.Controllers
             // Assert
             Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
         }
+
+        [TestMethod]
+        public async Task Put_Returns_200_OK_When_User_Updated()
+        {
+            // Arrange 
+            var guid = Guid.NewGuid().ToString();
+            var updateUser = new EditUserInput { Email = "user@email.com", UserName = "username" };
+            var outputuser = new UserDto { Email = "user@email.com", UserName = "username", Id = guid };
+
+            _userService.Setup(us => us.EditUserAsync(It.IsAny<string>(), It.IsAny<EditUserInput>())).Returns(() => Task.FromResult(outputuser));
+
+            // Act
+            var controller = new UsersController(_logger.Object, _userService.Object);
+
+            var result = (ObjectResult)await controller.Put(guid, updateUser);
+
+            // Assert
+            Assert.AreEqual(StatusCodes.Status200OK, result.StatusCode);
+            Assert.AreEqual(updateUser.UserName, ((UserDto)result.Value).UserName);
+        }
+
+        [TestMethod]
+        public async Task Put_Returns_404_NotFound_When_User_Not_Exist()
+        {
+            // Arrange 
+            var guid = Guid.NewGuid().ToString();
+            var updateUser = new EditUserInput { Email = "user@email.com", UserName = "username" };
+
+            _userService.Setup(us => us.EditUserAsync(It.IsAny<string>(), It.IsAny<EditUserInput>())).Throws<KeyNotFoundException>();
+
+            // Act
+            var controller = new UsersController(_logger.Object, _userService.Object);
+
+            var result = (StatusCodeResult)await controller.Put(guid, updateUser);
+
+            // Assert
+            Assert.AreEqual(StatusCodes.Status404NotFound, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task Put_Returns_409_Conflict_When_User_Could_Not_Be_Updated()
+        {
+            // Arrange 
+            var guid = Guid.NewGuid().ToString();
+            var updateUser = new EditUserInput { Email = "user@email.com", UserName = "username" };
+
+            _userService.Setup(us => us.EditUserAsync(It.IsAny<string>(), It.IsAny<EditUserInput>())).Throws<InvalidOperationException>();
+
+            // Act
+            var controller = new UsersController(_logger.Object, _userService.Object);
+
+            var result = (StatusCodeResult)await controller.Put(guid, updateUser);
+
+            // Assert
+            Assert.AreEqual(StatusCodes.Status409Conflict, result.StatusCode);
+        }
     }
 }

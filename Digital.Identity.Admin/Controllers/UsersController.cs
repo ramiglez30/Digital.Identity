@@ -61,7 +61,7 @@ namespace Digital.Identity.Admin.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Post([FromBody] CreateUserInput input)
         {
-            _logger.LogInformation($"Create user with username: {input.UserName}");
+            _logger.LogInformation($"Create user with username: {input.UserName} started.");
             try
             {
                 var insertedUser = await _userService.CreateUserAsync(input);
@@ -76,9 +76,26 @@ namespace Digital.Identity.Admin.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UserDto userInput)
+        public async Task<IActionResult> Put(string id, [FromBody] EditUserInput userInput)
         {
-            
+            _logger.LogInformation($"Update user with id: {id} started.");
+            try
+            {
+                var updatedUser = await _userService.EditUserAsync(id, userInput);
+                _logger.LogInformation($"User with id: {id} updated successfully.");
+
+                return StatusCode(StatusCodes.Status200OK, updatedUser);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            catch(InvalidOperationException ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return StatusCode(StatusCodes.Status409Conflict);
+            }
         }
 
         // DELETE api/<UsersController>/5

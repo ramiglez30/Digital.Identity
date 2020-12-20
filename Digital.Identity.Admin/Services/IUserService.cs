@@ -13,6 +13,6 @@ namespace Digital.Identity.Admin.Services
         Task<UserDto> CreateUserAsync(CreateUserInput input);
         Task DeleteUserAsync(string id);
 
-        Task<UserDto> EditUserAsync(EditUserInput input);
+        Task<UserDto> EditUserAsync(string id, EditUserInput input);
     }
 }

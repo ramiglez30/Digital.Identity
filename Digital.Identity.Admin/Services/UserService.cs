@@ -46,15 +46,20 @@ namespace Digital.Identity.Admin.Services
             await _userManager.DeleteAsync(user);
         }
 
-        public async Task<UserDto> EditUserAsync(EditUserInput input)
+        public async Task<UserDto> EditUserAsync(string id, EditUserInput input)
         {
-            var user = await _userManager.FindByIdAsync(input.Id);
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                throw new KeyNotFoundException($"The user with id: {id} does not exist.");
+            }
+
             _mapper.Map(input, user);
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Could not update user with id: {input.id}");
+                throw new InvalidOperationException($"Could not update user with id: {id}");
             }
 
             return _mapper.Map<UserDto>(user);
