@@ -67,7 +67,7 @@ namespace Digital.Identity.Admin.Controllers
                 var insertedUser = await _userService.CreateUserAsync(input);
                 return StatusCode(StatusCodes.Status201Created, insertedUser);
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
                 _logger.LogInformation($"Could not create user. Message: {ex.Message}");
                 return StatusCode(StatusCodes.Status409Conflict, new {message = ex.Message });
@@ -107,16 +107,23 @@ namespace Digital.Identity.Admin.Controllers
             _logger.LogInformation($"Delete user with id: {id}.");
             try
             {
-                await _userService.DeleteUserAsync(id);
+                var wasDeleted = await _userService.DeleteUserAsync(id);
+                if (wasDeleted)
+                {
+                    _logger.LogInformation($"User with id: {id} deleted.");
+                    return StatusCode(StatusCodes.Status200OK);
+                }
+                else
+                {
+                    _logger.LogInformation($"User with id: {id} was not deleted.");
+                    return StatusCode(StatusCodes.Status409Conflict);
+                }
             }
             catch (KeyNotFoundException ex)
             {
                 _logger.LogInformation($"Could not delete user. Error: " + ex.Message);
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-
-            _logger.LogInformation($"User with id: {id} deleted.");
-            return StatusCode(StatusCodes.Status200OK);
         }
     }
 #nullable disable

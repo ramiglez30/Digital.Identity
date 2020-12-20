@@ -4,12 +4,12 @@ using Digital.Identity.Admin.Models.EF;
 
 namespace Digital.Identity.Admin.AutoMapper
 {
-    public class AutpMapperProfile : Profile
+    public class AutoMapperProfile : Profile
     {
-        public AutpMapperProfile()
+        public AutoMapperProfile()
         {
             CreateMap<ApplicationUser, UserDto>();
-
+            CreateMap<EditUserInput, ApplicationUser>();
         }
     }
 }

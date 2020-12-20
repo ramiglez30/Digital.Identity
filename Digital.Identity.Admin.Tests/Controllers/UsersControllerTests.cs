@@ -125,7 +125,7 @@ namespace Digital.Identity.Admin.Tests.Controllers
             var guid = Guid.NewGuid().ToString();
             var newUser = new CreateUserInput { Email = "user1@email.com", Password = "A123*", UserName = "username" };
 
-            _userService.Setup(us => us.CreateUserAsync(It.IsAny<CreateUserInput>())).Throws<ArgumentException>();
+            _userService.Setup(us => us.CreateUserAsync(It.IsAny<CreateUserInput>())).Throws<InvalidOperationException>();
 
             // Act
             var controller = new UsersController(_logger.Object, _userService.Object);
@@ -142,7 +142,7 @@ namespace Digital.Identity.Admin.Tests.Controllers
             // Arrange 
             var guid = Guid.NewGuid().ToString();
 
-            _userService.Setup(us => us.DeleteUserAsync(It.IsAny<string>())).Returns(() => Task.CompletedTask);
+            _userService.Setup(us => us.DeleteUserAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             // Act
             var controller = new UsersController(_logger.Object, _userService.Object);
@@ -151,6 +151,23 @@ namespace Digital.Identity.Admin.Tests.Controllers
 
             // Assert
             Assert.AreEqual(StatusCodes.Status200OK, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task Delete_Returns_409_Conflict_When_User_Is_Not_Deleted()
+        {
+            // Arrange 
+            var guid = Guid.NewGuid().ToString();
+
+            _userService.Setup(us => us.DeleteUserAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            // Act
+            var controller = new UsersController(_logger.Object, _userService.Object);
+
+            var result = (StatusCodeResult)await controller.Delete(guid);
+
+            // Assert
+            Assert.AreEqual(StatusCodes.Status409Conflict, result.StatusCode);
         }
 
         [TestMethod]

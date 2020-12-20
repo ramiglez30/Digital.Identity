@@ -30,20 +30,22 @@ namespace Digital.Identity.Admin.Services
             var result = await _userManager.CreateAsync(user, input.Password);
             if (!result.Succeeded)
             {
-                throw new ArgumentException($"Some errors ocurred when trying to create the user. Errors: {result.Errors.Aggregate("", (acc,next)=> $"{acc} .- {next.Description}", result => result)}");
+                throw new InvalidOperationException($"Some errors ocurred when trying to create the user. Errors: {result.Errors.Aggregate("", (acc,next)=> $"{acc} .- {next.Description}", result => result)}");
             }
             var insertedUser = await _userManager.FindByNameAsync(input.UserName);
             return _mapper.Map<UserDto>(insertedUser);
         }
 
-        public async Task DeleteUserAsync(string id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) {
                 throw new KeyNotFoundException($"User was not found with id: {id}.");
             }
 
-            await _userManager.DeleteAsync(user);
+            var deleteResult = await _userManager.DeleteAsync(user);
+
+            return deleteResult.Succeeded;
         }
 
         public async Task<UserDto> EditUserAsync(string id, EditUserInput input)
@@ -77,7 +79,7 @@ namespace Digital.Identity.Admin.Services
         {
             var usersQuery = _userManager.Users.AsQueryable();
 
-            if (pagination != null) usersQuery = usersQuery.Skip(pagination.Skipped()).Take(pagination.PageTotal);
+            if (pagination != null) usersQuery = usersQuery.Skip(pagination.Skipped()).Take(pagination.PageTotal).OrderBy(u => u.Id);
 
             var users = await usersQuery.ToListAsync();
             if(users.Count > 0) _logger.LogInformation($"Could not find any user for this request. page number: {pagination?.PageNumber}, and total per page: {pagination?.PageTotal}");
