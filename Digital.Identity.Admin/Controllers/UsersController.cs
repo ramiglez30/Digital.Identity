@@ -29,7 +29,7 @@ namespace Digital.Identity.Admin.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IList<UserDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromQuery] PagedList pagination = null)
+        public async Task<IActionResult> Get([FromQuery] PagedList? pagination = null)
         {
             _logger.LogInformation($"Get users with page: {pagination?.PageNumber}, and page total: {pagination?.PageTotal}");
             var users = await _userService.GetUsersAsync(pagination);
@@ -64,22 +64,21 @@ namespace Digital.Identity.Admin.Controllers
             _logger.LogInformation($"Create user with username: {input.UserName}");
             try
             {
-                await _userService.CreateUserAsync(input);
+                var insertedUser = await _userService.CreateUserAsync(input);
+                return StatusCode(StatusCodes.Status201Created, insertedUser);
             }
             catch (ArgumentException ex)
             {
                 _logger.LogInformation($"Could not create user. Message: {ex.Message}");
                 return StatusCode(StatusCodes.Status409Conflict, new {message = ex.Message });
             }
-
-            return StatusCode(StatusCodes.Status201Created);
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] UserDto userInput)
         {
-            throw new NotImplementedException();
+            
         }
 
         // DELETE api/<UsersController>/5

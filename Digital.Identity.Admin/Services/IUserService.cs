@@ -10,7 +10,9 @@ namespace Digital.Identity.Admin.Services
 
         Task<UserDto> GetUserAsync(string id);
 
-        Task CreateUserAsync(CreateUserInput input);
+        Task<UserDto> CreateUserAsync(CreateUserInput input);
         Task DeleteUserAsync(string id);
+
+        Task<UserDto> EditUserAsync(EditUserInput input);
     }
 }

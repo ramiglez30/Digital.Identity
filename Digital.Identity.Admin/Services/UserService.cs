@@ -24,7 +24,7 @@ namespace Digital.Identity.Admin.Services
             _logger = logger;
         }
 
-        public async Task CreateUserAsync(CreateUserInput input)
+        public async Task<UserDto> CreateUserAsync(CreateUserInput input)
         {
             var user = new ApplicationUser { UserName = input.UserName, Email = input.Email };
             var result = await _userManager.CreateAsync(user, input.Password);
@@ -32,6 +32,8 @@ namespace Digital.Identity.Admin.Services
             {
                 throw new ArgumentException($"Some errors ocurred when trying to create the user. Errors: {result.Errors.Aggregate("", (acc,next)=> $"{acc} .- {next.Description}", result => result)}");
             }
+            var insertedUser = await _userManager.FindByNameAsync(input.UserName);
+            return _mapper.Map<UserDto>(insertedUser);
         }
 
         public async Task DeleteUserAsync(string id)
@@ -42,6 +44,20 @@ namespace Digital.Identity.Admin.Services
             }
 
             await _userManager.DeleteAsync(user);
+        }
+
+        public async Task<UserDto> EditUserAsync(EditUserInput input)
+        {
+            var user = await _userManager.FindByIdAsync(input.Id);
+            _mapper.Map(input, user);
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException($"Could not update user with id: {input.id}");
+            }
+
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> GetUserAsync(string id)
@@ -56,7 +72,7 @@ namespace Digital.Identity.Admin.Services
         {
             var usersQuery = _userManager.Users.AsQueryable();
 
-            if (pagination != null && pagination.PageTotal > 0) usersQuery = usersQuery.Skip(pagination.Skipped()).Take(pagination.PageTotal);
+            if (pagination != null) usersQuery = usersQuery.Skip(pagination.Skipped()).Take(pagination.PageTotal);
 
             var users = await usersQuery.ToListAsync();
             if(users.Count > 0) _logger.LogInformation($"Could not find any user for this request. page number: {pagination?.PageNumber}, and total per page: {pagination?.PageTotal}");

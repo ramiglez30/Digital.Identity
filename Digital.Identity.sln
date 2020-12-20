@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcClient", "..\repos\Ident
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "..\repos\IdentityServer\IdentityServer4\samples\Quickstarts\6_AspNetIdentity\src\Api\Api.csproj", "{5D5A1426-5DBF-45E2-8BCB-4B719DF68245}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digital.Identity.Admin", "Digital.Identity.Admin\Digital.Identity.Admin.csproj", "{3D9E95CE-813F-4E62-99F1-396E5CDCB7C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digital.Identity.Admin", "Digital.Identity.Admin\Digital.Identity.Admin.csproj", "{3D9E95CE-813F-4E62-99F1-396E5CDCB7C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3C7F6E9F-DC6E-4EC4-8B6C-3FF4F71C8F01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digital.Identity.Admin.Tests", "Digital.Identity.Admin.Tests\Digital.Identity.Admin.Tests.csproj", "{F89BE68B-83D4-4758-96BB-119B504EB304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{3D9E95CE-813F-4E62-99F1-396E5CDCB7C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D9E95CE-813F-4E62-99F1-396E5CDCB7C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D9E95CE-813F-4E62-99F1-396E5CDCB7C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F89BE68B-83D4-4758-96BB-119B504EB304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F89BE68B-83D4-4758-96BB-119B504EB304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F89BE68B-83D4-4758-96BB-119B504EB304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F89BE68B-83D4-4758-96BB-119B504EB304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F89BE68B-83D4-4758-96BB-119B504EB304} = {3C7F6E9F-DC6E-4EC4-8B6C-3FF4F71C8F01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E8B7C7A-EC20-418E-8314-D685EA3D30AB}
