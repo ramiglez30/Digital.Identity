@@ -13,5 +13,6 @@ Includes (in development):
 
 Note: IdentityServer4 is now Duende Software with license FOSS (RPL). As stated by IdentityServer4 team, they will provide bug fixes and security updates until November 2022.
 
-https://github.com/DuendeSoftware/IdentityServer
-https://duendesoftware.com/products/identityserver
+Duende Software: https://github.com/DuendeSoftware/IdentityServer
+
+Github Repo: https://duendesoftware.com/products/identityserver
