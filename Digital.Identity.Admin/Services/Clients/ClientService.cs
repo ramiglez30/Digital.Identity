@@ -28,12 +28,12 @@ namespace Digital.Identity.Admin.Services.Clients
             var clientQuery = _configDb.Clients.AsQueryable();
             if (withDependencies)
             {
-                clientQuery =clientQuery.Include(c => c.AllowedCorsOrigins)
+                clientQuery = clientQuery.Include(c => c.AllowedCorsOrigins)
                     .Include(c => c.AllowedScopes)
                     .Include(c => c.ClientSecrets)
                     .Include(c => c.AllowedGrantTypes)
                     .Include(c => c.RedirectUris)
-                    .Include(c => c.PostLogoutRedirectUris)
+                    .Include(c => c.PostLogoutRedirectUris);
             }
 
             var client = await clientQuery.FirstOrDefaultAsync(c => c.ClientId == clientId);

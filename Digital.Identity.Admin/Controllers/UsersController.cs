@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Digital.Identity.Admin.Models;
 using Digital.Identity.Admin.Models.Api;
-using Digital.Identity.Admin.Models.EF;
 using Digital.Identity.Admin.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
