@@ -1,3 +1,17 @@
 # Digital.Identity
 
-This a demo only repository. 
+This is a demo repository that aims to create an small microservices solution using IdentityServer4 as Token Service (OAUTH / OpenId Connect). 
+
+Includes (in development): 
+- Identity Server 
+- Identity Server Admin
+- API 
+- MVC App
+- SPA App
+- Blazor Server App
+- Azure Function (Httptrigger)
+
+Note: IdentityServer4 is now Duende Software with license FOSS (RPL). As stated by IdentityServer4 team, they will provide bug fixes and security updates until November 2022.
+
+https://github.com/DuendeSoftware/IdentityServer
+https://duendesoftware.com/products/identityserver
